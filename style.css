@@ -1,0 +1,523 @@
+/* ============================================================
+   style.css — DNA Storage Encoder
+   All visual styling lives here.
+   ============================================================ */
+
+
+/* ── CSS Variables (theme colours & fonts) ───────────────── */
+:root {
+  --bg:          #050a0e;         /* main background */
+  --bg2:         #0a1520;         /* card / box background */
+  --border:      rgba(0,200,150,0.18);
+  --border2:     rgba(0,200,150,0.38);
+  --green:       #00c896;         /* primary accent */
+  --green-dim:   rgba(0,200,150,0.10);
+  --blue:        #378ADD;
+  --purple:      #7F77DD;
+  --coral:       #D85A30;
+  --amber:       #EF9F27;
+  --text:        #c8e6d8;         /* main text */
+  --text-dim:    #5a8a70;         /* muted text */
+  --text-muted:  #2a5040;        /* very muted */
+  --mono:        'Share Tech Mono', monospace;
+  --display:     'Orbitron', sans-serif;
+}
+
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle background grid pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,200,150,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,150,.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+
+/* ── App Container ────────────────────────────────────────── */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+
+/* ── Header ───────────────────────────────────────────────── */
+header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: var(--display);
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: .25em;
+  margin-bottom: .4rem;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .06em;
+}
+
+h1 span {
+  color: var(--green);
+}
+
+.tagline {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: .4rem;
+  letter-spacing: .06em;
+}
+
+
+/* ── Tabs ─────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.tab {
+  padding: 8px 20px;
+  font-size: 10px;
+  font-family: var(--mono);
+  letter-spacing: .12em;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  transition: all .2s;
+  border-right: 1px solid var(--border);
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab:hover {
+  color: var(--green);
+  background: var(--green-dim);
+}
+
+.tab.active {
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+
+/* ── Textarea ─────────────────────────────────────────────── */
+textarea {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 13px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  resize: vertical;
+  min-height: 75px;
+  margin-bottom: .9rem;
+  outline: none;
+  transition: border .2s;
+}
+
+textarea:focus {
+  border-color: var(--green);
+}
+
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+
+/* ── File Upload Zone ─────────────────────────────────────── */
+.upload-zone {
+  border: 1px dashed var(--border2);
+  border-radius: 5px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: .9rem;
+  transition: all .2s;
+  background: var(--bg2);
+}
+
+.upload-zone:hover {
+  background: var(--green-dim);
+  border-color: var(--green);
+}
+
+.upload-icon {
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: var(--green);
+}
+
+.upload-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: .05em;
+}
+
+#file-input {
+  display: none;
+}
+
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  background: transparent;
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  padding: 8px 22px;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--green);
+  cursor: pointer;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: all .2s;
+  margin-right: 8px;
+}
+
+.btn:hover {
+  background: var(--green);
+  color: var(--bg);
+}
+
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+
+/* ── Checkbox label ───────────────────────────────────────── */
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-bottom: .9rem;
+}
+
+
+/* ── Banners ──────────────────────────────────────────────── */
+.banner {
+  border-radius: 5px;
+  padding: 9px 15px;
+  font-size: 12px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: .04em;
+}
+
+.banner-ok {
+  border: 1px solid rgba(0,200,150,.4);
+  background: rgba(0,200,150,.07);
+  color: var(--green);
+}
+
+.banner-warn {
+  border: 1px solid rgba(239,159,39,.4);
+  background: rgba(239,159,39,.07);
+  color: var(--amber);
+}
+
+
+/* ── Stat Cards ───────────────────────────────────────────── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 1.4rem;
+}
+
+.stat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 13px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* green top accent bar */
+.stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  opacity: .35;
+}
+
+.stat-val {
+  font-family: var(--display);
+  font-size: 19px;
+  color: var(--green);
+}
+
+.stat-lbl {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 3px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+
+/* ── Divider & Section Headings ───────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.4rem 0;
+}
+
+.section-head {
+  font-family: var(--display);
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: .75rem;
+  padding-bottom: .4rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-num {
+  color: var(--text-muted);
+  margin-right: .4rem;
+}
+
+.info-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+
+/* ── Mono & DNA boxes ─────────────────────────────────────── */
+.mono-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 13px;
+  font-size: 11px;
+  word-break: break-all;
+  line-height: 1.8;
+  color: var(--text-dim);
+  max-height: 85px;
+  overflow-y: auto;
+  margin-bottom: 1.4rem;
+}
+
+.dna-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 13px;
+  font-size: 12px;
+  word-break: break-all;
+  line-height: 2;
+  max-height: 105px;
+  overflow-y: auto;
+  margin-bottom: 1.4rem;
+}
+
+/* Base colours used inside .dna-box and .oligo-seq */
+.A { color: #00c896; font-weight: bold; }
+.T { color: #D85A30; font-weight: bold; }
+.G { color: #7F77DD; font-weight: bold; }
+.C { color: #378ADD; font-weight: bold; }
+.parity { color: var(--amber); font-weight: bold; font-size: 10px; }
+.primer  { color: var(--amber); font-weight: bold; }
+
+
+/* ── Legend ───────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  gap: 12px;
+  margin-bottom: .65rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+
+/* ── GC Content Bar ───────────────────────────────────────── */
+.gc-wrap {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 12px 14px;
+  margin-bottom: 1.4rem;
+}
+
+.gc-bg {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--text-muted);
+  overflow: hidden;
+  margin: 5px 0;
+}
+
+.gc-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width .5s, background .5s;
+}
+
+.gc-lbl {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+
+/* ── Oligo Cards ──────────────────────────────────────────── */
+.oligo-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 1.4rem;
+}
+
+.oligo {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 9px 11px;
+}
+
+.oligo-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.oligo-id {
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: .06em;
+}
+
+.oligo-seq {
+  font-size: 11px;
+  word-break: break-all;
+  line-height: 1.8;
+}
+
+
+/* ── Decode output ────────────────────────────────────────── */
+.decode-out {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text);
+  min-height: 42px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+#decode-results {
+  display: none;
+  margin-top: 1rem;
+}
+
+#decode-status {
+  margin-bottom: .75rem;
+  font-size: 12px;
+}
+
+
+/* ── Canvas (helix) ───────────────────────────────────────── */
+canvas {
+  width: 100%;
+  border-radius: 5px;
+  display: block;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+}
+
+
+/* ── Results section ──────────────────────────────────────── */
+#results {
+  display: none;
+  margin-top: 2rem;
+}
+
+
+/* ── Utility ──────────────────────────────────────────────── */
+.hidden {
+  display: none;
+}

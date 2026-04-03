@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA Storage Encoder</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Our CSS file -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- ── HEADER ─────────────────────────────────────── -->
+    <header>
+      <div class="logo">// BIOTECH · SYNTHETIC BIOLOGY LAB</div>
+      <h1>DNA <span>Storage</span> Encoder</h1>
+      <div class="tagline">
+        Binary → DNA · 2-bit mapping: 00=A · 01=T · 10=G · 11=C · parity error correction · oligo chunking
+      </div>
+    </header>
+
+    <!-- ── TABS ──────────────────────────────────────── -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('text')">Text Input</button>
+      <button class="tab"        onclick="switchTab('file')">File Upload</button>
+      <button class="tab"        onclick="switchTab('decode')">Decode DNA</button>
+    </div>
+
+    <!-- ── TEXT INPUT TAB ─────────────────────────────── -->
+    <div id="tab-text">
+      <textarea id="text-input" placeholder="Type or paste any text here…"></textarea>
+      <button class="btn" onclick="encode()">Encode → DNA</button>
+    </div>
+
+    <!-- ── FILE UPLOAD TAB ────────────────────────────── -->
+    <div id="tab-file" class="hidden">
+      <div class="upload-zone" onclick="document.getElementById('file-input').click()" id="drop-zone">
+        <div class="upload-icon">◈</div>
+        <div class="upload-label" id="upload-label">Click or drag to upload · any file type</div>
+      </div>
+      <input type="file" id="file-input" accept="*/*">
+      <button class="btn" onclick="encode()">Encode → DNA</button>
+    </div>
+
+    <!-- ── DECODE TAB ─────────────────────────────────── -->
+    <div id="tab-decode" class="hidden">
+      <textarea id="dna-decode-input" placeholder="Paste DNA sequence here… (only A, T, G, C)" style="min-height:90px;"></textarea>
+      <label class="check-label">
+        <input type="checkbox" id="has-parity" checked>
+        Sequence includes parity bases (every 9th base)
+      </label>
+      <button class="btn" onclick="decodeDNA()">Decode → Text</button>
+
+      <div id="decode-results">
+        <div id="decode-status"></div>
+        <div class="section-head"><span>◆ Decoded output</span></div>
+        <div class="decode-out" id="decode-out"></div>
+      </div>
+    </div>
+
+    <!-- ── RESULTS (shown after encoding) ────────────── -->
+    <div id="results">
+
+      <div class="banner banner-ok">
+        <span>✓</span>
+        <span id="success-msg">Encoding successful</span>
+      </div>
+
+      <div id="gc-warn" class="banner banner-warn hidden">
+        <span>⚠</span>
+        <span id="gc-warn-msg"></span>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-val" id="s-bytes">—</div>
+          <div class="stat-lbl">Source bytes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="s-bases">—</div>
+          <div class="stat-lbl">Raw bases</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="s-bases-ec">—</div>
+          <div class="stat-lbl">Bases + parity</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="s-oligos">—</div>
+          <div class="stat-lbl">Oligos</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Section 01: Binary -->
+      <div class="section-head"><span><span class="section-num">01 ·</span> Binary stream</span></div>
+      <div class="mono-box" id="binary-out"></div>
+
+      <hr class="divider">
+
+      <!-- Section 02: DNA Sequence -->
+      <div class="section-head">
+        <span><span class="section-num">02 ·</span> DNA sequence (with parity)</span>
+        <button class="copy-btn" id="copy-btn" onclick="copyDNA()">copy full</button>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:#00c896"></div>A (00)</div>
+        <div class="legend-item"><div class="dot" style="background:#D85A30"></div>T (01)</div>
+        <div class="legend-item"><div class="dot" style="background:#7F77DD"></div>G (10)</div>
+        <div class="legend-item"><div class="dot" style="background:#378ADD"></div>C (11)</div>
+        <div class="legend-item"><div class="dot" style="background:#EF9F27"></div>parity base</div>
+      </div>
+      <div class="dna-box" id="dna-out"></div>
+
+      <hr class="divider">
+
+      <!-- Section 03: GC Content -->
+      <div class="section-head"><span><span class="section-num">03 ·</span> GC content analysis</span></div>
+      <div class="gc-wrap">
+        <div class="gc-lbl">
+          <span>Base composition</span>
+          <span id="gc-pct-lbl"></span>
+        </div>
+        <div class="gc-bg">
+          <div class="gc-fill" id="gc-bar" style="width:0%"></div>
+        </div>
+        <div class="gc-lbl" style="margin-top:4px;">
+          <span id="at-breakdown"></span>
+          <span id="gc-breakdown"></span>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Section 04: Error Correction -->
+      <div class="section-head"><span><span class="section-num">04 ·</span> Error correction (parity per byte)</span></div>
+      <div class="info-text">Each 8-base block gets 1 parity base (orange). Even GC count → A, odd → T.</div>
+      <div class="mono-box" id="ec-explain" style="max-height:65px;"></div>
+
+      <hr class="divider">
+
+      <!-- Section 05: Oligos -->
+      <div class="section-head"><span><span class="section-num">05 ·</span> Oligo chunking (primers + 184 data bases)</span></div>
+      <div class="info-text">
+        <span class="primer">ATCGATCG</span> + up to 184 data bases + <span class="primer">CGATCGAT</span> = ≤200 bases per oligo
+      </div>
+      <div class="oligo-wrap" id="oligo-wrap"></div>
+
+      <hr class="divider">
+
+      <!-- Section 06: Visual Helix -->
+      <div class="section-head"><span><span class="section-num">06 ·</span> Visual double helix (first 200 bases)</span></div>
+      <canvas id="dna-canvas" height="130"></canvas>
+
+    </div>
+    <!-- end #results -->
+
+  </div>
+  <!-- end .app -->
+
+  <!-- Our JavaScript file -->
+  <script src="script.js"></script>
+
+</body>
+</html>
